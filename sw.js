@@ -1,6 +1,6 @@
 /* NAGIMU Service Worker — precache app shell */
 
-const CACHE_NAME = 'nagimu-v15';
+const CACHE_NAME = 'nagimu-v16';
 const PRECACHE = [
   '/',
   '/index.html',

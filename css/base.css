@@ -174,25 +174,50 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease),
+    opacity 0.2s var(--ease);
 }
 
-.audio-toggle:hover,
-.audio-toggle:active {
-  color: var(--ink-primary);
+.audio-toggle--on {
+  color: var(--element-color);
+  background: var(--element-bg);
   border-color: var(--element-color);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--element-color) 18%, transparent),
+    0 0 20px color-mix(in srgb, var(--element-color) 28%, transparent);
+  transform: scale(1);
+}
+
+.audio-toggle--on:hover,
+.audio-toggle--on:active {
+  color: var(--element-color);
+  border-color: var(--element-color);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--element-color) 28%, transparent),
+    0 0 26px color-mix(in srgb, var(--element-color) 38%, transparent);
+  transform: scale(1.05);
 }
 
 .audio-toggle--off {
   color: var(--ink-disabled);
-  background: var(--void-01);
+  background: transparent;
   border-color: var(--void-04);
+  box-shadow: none;
+  opacity: 0.55;
+  transform: scale(0.94);
 }
 
 .audio-toggle--off:hover,
 .audio-toggle--off:active {
   color: var(--ink-tertiary);
   border-color: var(--void-05);
+  opacity: 0.75;
+  transform: scale(0.97);
 }
 
 .audio-toggle__icon {

@@ -7,6 +7,7 @@ export function updateAudioToggleButton(button) {
   const on = isAudioEnabled();
   button.setAttribute('aria-pressed', String(on));
   button.setAttribute('aria-label', on ? 'Sound on' : 'Sound off');
+  button.classList.toggle('audio-toggle--on', on);
   button.classList.toggle('audio-toggle--off', !on);
 }
 
