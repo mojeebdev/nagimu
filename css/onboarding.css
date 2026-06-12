@@ -1,0 +1,176 @@
+/* NAGIMU — onboarding / zodiac select */
+
+.onboarding {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px 40px;
+  position: relative;
+  z-index: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#starfield {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wordmark {
+  font-family: var(--font);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-hero);
+  letter-spacing: var(--tracking-display);
+  line-height: 1;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.tagline {
+  font-size: var(--text-body);
+  color: var(--ink-secondary);
+  margin-bottom: 32px;
+  flex-shrink: 0;
+}
+
+.field-group {
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.field-label {
+  display: block;
+  font-size: var(--text-label);
+  font-weight: var(--weight-regular);
+  color: var(--ink-tertiary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  margin-bottom: 10px;
+}
+
+.name-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--void-02);
+  border: 1px solid var(--void-05);
+  border-radius: 12px;
+  font-size: var(--text-h3);
+  color: var(--ink-primary);
+  outline: none;
+  transition: border-color 0.2s var(--ease);
+}
+
+.name-input::placeholder {
+  color: var(--ink-disabled);
+}
+
+.name-input:focus {
+  border-color: var(--element-color);
+}
+
+.zodiac-select-wrap {
+  position: relative;
+}
+
+.zodiac-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid var(--ink-tertiary);
+  border-bottom: 1.5px solid var(--ink-tertiary);
+  transform: translateY(-65%) rotate(45deg);
+  pointer-events: none;
+}
+
+.zodiac-select {
+  width: 100%;
+  padding: 14px 40px 14px 16px;
+  background: var(--void-02);
+  border: 1px solid var(--void-05);
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-regular);
+  color: var(--ink-disabled);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.zodiac-select.has-value {
+  color: var(--ink-primary);
+  border-color: var(--element-color);
+  background: var(--element-bg);
+  font-weight: var(--weight-bold);
+}
+
+.zodiac-select:focus {
+  border-color: var(--element-color);
+}
+
+.zodiac-select option {
+  background: var(--void-02);
+  color: var(--ink-primary);
+  font-weight: var(--weight-regular);
+}
+
+.onboarding .audio-toggle {
+  position: absolute;
+  top: 32px;
+  right: 24px;
+  z-index: 2;
+}
+
+.begin-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 16px;
+  background: var(--element-color);
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-h3);
+  color: var(--void-00);
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  flex-shrink: 0;
+}
+
+.begin-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.begin-btn:active {
+  transform: scale(0.98);
+}
+
+/* Short phones — tuck content in without changing the look */
+@media (max-height: 667px) {
+  .onboarding {
+    padding: 24px 24px 32px;
+  }
+
+  .wordmark {
+    font-size: 48px;
+  }
+
+  .tagline {
+    margin-bottom: 24px;
+  }
+
+  .field-group {
+    margin-bottom: 16px;
+  }
+}

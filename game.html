@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#050508">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NAGIMU">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vend:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/game.css">
+  <title>NAGIMU — Session</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+</head>
+<body>
+  <div class="shell">
+    <div class="game-layout">
+      <button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="true" aria-label="Sound on">
+        <svg class="audio-toggle__icon audio-toggle__icon--on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+        <svg class="audio-toggle__icon audio-toggle__icon--off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+      </button>
+      <a href="/" id="reset-link" class="reset-link">Not you? Reset</a>
+
+      <header id="game-hud">
+        <button id="you-btn" class="hud-left hud-you-btn" type="button" aria-label="Your journey">
+          <span id="hud-glyph" class="hud-glyph"></span>
+          <span id="hud-name" class="hud-name"></span>
+        </button>
+        <div class="hud-center">
+          <span id="hud-score" class="hud-score">0</span>
+        </div>
+        <div class="hud-right">
+          <span id="hud-hi" class="hud-hi">HI 0</span>
+          <span id="hud-time" class="hud-time">0:00</span>
+        </div>
+      </header>
+
+      <canvas id="game-canvas"></canvas>
+
+      <footer id="game-bottom">
+        <button id="end-session-btn" class="ghost-btn" type="button">End Session</button>
+        <span id="combo-indicator" class="combo-indicator"></span>
+      </footer>
+
+      <div id="breath-overlay">
+        <div class="breath-circle"></div>
+        <p class="breath-text">breathe</p>
+        <p class="breath-skip">tap to continue</p>
+      </div>
+
+      <div id="history-overlay">
+        <button id="history-close-btn" class="history-close" type="button" aria-label="Close">×</button>
+        <span id="history-glyph" class="history-glyph"></span>
+        <p id="history-name" class="history-name"></p>
+        <p class="history-label">Your journey</p>
+        <div class="history-stats">
+          <div class="history-stat">
+            <span id="history-streak" class="history-stat-value">0</span>
+            <span class="history-stat-label">day streak</span>
+          </div>
+          <div class="history-stat">
+            <span id="history-sessions" class="history-stat-value">0</span>
+            <span class="history-stat-label">sessions</span>
+          </div>
+          <div class="history-stat">
+            <span id="history-hi" class="history-stat-value">0</span>
+            <span class="history-stat-label">all-time HI</span>
+          </div>
+          <div class="history-stat">
+            <span id="history-last" class="history-stat-value">0</span>
+            <span class="history-stat-label">last session</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="session-overlay">
+        <span id="session-glyph" class="session-glyph"></span>
+        <p class="session-label">Session complete</p>
+        <p id="session-score" class="session-score">0</p>
+        <p class="session-hi">HI <span id="session-hi">0</span></p>
+        <p id="session-badge" class="session-badge" hidden>New HI</p>
+        <div class="session-actions">
+          <button id="play-again-btn" class="session-btn session-btn-primary" type="button">Play again</button>
+          <button id="home-btn" class="session-btn session-btn-secondary" type="button">Back home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/game.js"></script>
+</body>
+</html>

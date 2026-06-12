@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#050508">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NAGIMU">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/assets/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vend:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/onboarding.css">
+  <link rel="stylesheet" href="/css/credit.css">
+  <title>NAGIMU</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
+  <script type="module" src="/js/pull-refresh.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <canvas id="starfield"></canvas>
+    <main class="onboarding">
+      <button id="audio-toggle" class="audio-toggle" type="button" aria-pressed="true" aria-label="Sound on">
+        <svg class="audio-toggle__icon audio-toggle__icon--on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        </svg>
+        <svg class="audio-toggle__icon audio-toggle__icon--off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+          <line x1="23" y1="9" x2="17" y2="15"/>
+          <line x1="17" y1="9" x2="23" y2="15"/>
+        </svg>
+      </button>
+
+      <h1 class="wordmark">NAGIMU</h1>
+      <p class="tagline">凪む — the moment the sea becomes still</p>
+
+      <div class="field-group">
+        <label class="field-label" for="player-name">Your name</label>
+        <input
+          id="player-name"
+          class="name-input"
+          type="text"
+          maxlength="18"
+          placeholder="What's your name?"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="zodiac-select">Your sign</label>
+        <div class="zodiac-select-wrap">
+          <select id="zodiac-select" class="zodiac-select">
+            <option value="" disabled selected>Select your sign</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="begin-btn" class="begin-btn" type="button">Begin Session</button>
+
+      <footer class="site-credit">
+        <p>Built to ease Mental Health fatigue by <a href="https://x.com/mojeebeth" class="credit-handle" target="_blank" rel="noopener noreferrer">@mojeebeth</a></p>
+      </footer>
+    </main>
+  </div>
+
+  <script type="module">
+    import { ZODIACS, ZODIAC_KEYS, applyElementTheme } from './js/zodiac.js';
+    import { getPlayer, setPlayer } from './js/db.js';
+    import { initAudio, isAudioEnabled } from './js/audio.js';
+    import { initAudioToggle } from './js/audio-ui.js';
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    const nameInput = document.getElementById('player-name');
+    const zodiacSelect = document.getElementById('zodiac-select');
+    const beginBtn = document.getElementById('begin-btn');
+    const audioToggle = document.getElementById('audio-toggle');
+
+    let selectedZodiac = null;
+    let stars = [];
+
+    function resizeCanvas() {
+      const shell = canvas.parentElement;
+      canvas.width = shell.clientWidth;
+      canvas.height = shell.clientHeight;
+    }
+
+    function initStars(count = 80) {
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        speed: 0.05 + Math.random() * 0.2,
+        radius: 0.2 + Math.random() * 1.2,
+        opacity: 0.08 + Math.random() * 0.42,
+      }));
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const star of stars) {
+        star.x -= star.speed;
+        if (star.x < 0) {
+          star.x = canvas.width;
+          star.y = Math.random() * canvas.height;
+        }
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(240,238,248,${star.opacity})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(drawStars);
+    }
+
+    function buildZodiacSelect() {
+      for (const key of ZODIAC_KEYS) {
+        const z = ZODIACS[key];
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = `${z.glyph}  ${z.name}  ·  ${z.element}`;
+        zodiacSelect.appendChild(option);
+      }
+    }
+
+    function selectZodiac(key) {
+      selectedZodiac = key || null;
+      if (key) {
+        applyElementTheme(key);
+        zodiacSelect.classList.add('has-value');
+      } else {
+        zodiacSelect.classList.remove('has-value');
+      }
+      updateBeginButton();
+    }
+
+    zodiacSelect.addEventListener('change', () => {
+      selectZodiac(zodiacSelect.value || null);
+    });
+
+    function updateBeginButton() {
+      const ready = nameInput.value.trim().length > 0 && selectedZodiac;
+      beginBtn.classList.toggle('visible', ready);
+    }
+
+    nameInput.addEventListener('input', updateBeginButton);
+
+    beginBtn.addEventListener('click', async () => {
+      if (isAudioEnabled()) await initAudio();
+      const name = nameInput.value.trim();
+      if (!name || !selectedZodiac) return;
+      await setPlayer(name, selectedZodiac);
+      window.location.href = '/game.html';
+    });
+
+    async function init() {
+      const editMode = new URLSearchParams(window.location.search).has('edit');
+      const player = await getPlayer();
+
+      await initAudioToggle(audioToggle);
+
+      resizeCanvas();
+      initStars();
+      drawStars();
+      buildZodiacSelect();
+
+      if (player?.name && player?.zodiac) {
+        if (!editMode) {
+          window.location.replace('/game.html');
+          return;
+        }
+
+        nameInput.value = player.name;
+        zodiacSelect.value = player.zodiac;
+        selectZodiac(player.zodiac);
+        updateBeginButton();
+      }
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        initStars();
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

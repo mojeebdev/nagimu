@@ -1,0 +1,9 @@
+{
+  "name": "nagimu",
+  "private": true,
+  "license": "MIT",
+  "author": "Mojeeb Titilayo (https://mojeeb.xyz)",
+  "scripts": {
+    "dev": "npx serve ."
+  }
+}

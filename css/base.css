@@ -1,0 +1,263 @@
+/* NAGIMU — base reset, design tokens, shell layout */
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+
+:root {
+  /* Void palette */
+  --void-00: #020203;
+  --void-01: #050508;
+  --void-02: #0C0C12;
+  --void-03: #14141C;
+  --void-04: #1E1E28;
+  --void-05: #2C2C3A;
+
+  /* Ink */
+  --ink-primary:   #F0EEF8;
+  --ink-secondary: rgba(240, 238, 248, 0.55);
+  --ink-tertiary:  rgba(240, 238, 248, 0.28);
+  --ink-disabled:  rgba(240, 238, 248, 0.15);
+
+  /* Element accent colors */
+  --fire:   #D85A30;
+  --fire-bg: rgba(216, 90, 48, 0.12);
+  --earth:  #1D9E75;
+  --earth-bg: rgba(29, 158, 117, 0.12);
+  --air:    #378ADD;
+  --air-bg: rgba(55, 138, 221, 0.12);
+  --water:  #7F77DD;
+  --water-bg: rgba(127, 119, 221, 0.12);
+
+  --element-color: var(--water);
+  --element-bg:    var(--water-bg);
+
+  /* Typography */
+  --font: 'Vend', sans-serif;
+  --weight-bold:    700;
+  --weight-regular: 400;
+
+  --text-hero:  64px;
+  --text-h1:    32px;
+  --text-h2:    20px;
+  --text-h3:    16px;
+  --text-body:  13px;
+  --text-label: 10px;
+  --tracking-display: -0.04em;
+  --tracking-heading: -0.02em;
+  --tracking-label:    0.14em;
+
+  /* Layout */
+  --shell-width:  390px;
+  --shell-radius: 44px;
+  --shell-border: 1px solid rgba(255, 255, 255, 0.07);
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Shell — exactly the device screen on phones ─────────────────────────── */
+
+html {
+  /* Allows mobile browser pull-to-refresh when combined with touch handler */
+  overscroll-behavior-y: auto;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--void-00);
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font);
+  font-weight: var(--weight-regular);
+  color: var(--ink-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Pull-to-refresh indicator */
+.pull-refresh {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  z-index: 100;
+  transform: translate(-50%, calc(-100% + var(--pull, 0px)));
+  padding: 10px 16px;
+  background: var(--void-03);
+  border: 1px solid var(--void-05);
+  border-radius: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s var(--ease);
+}
+
+.pull-refresh--active {
+  opacity: 1;
+}
+
+.pull-refresh--ready .pull-refresh__label {
+  color: var(--element-color);
+}
+
+.pull-refresh__label {
+  font-size: var(--text-label);
+  color: var(--ink-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Sound toggle */
+.audio-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--void-05);
+  background: var(--void-02);
+  color: var(--ink-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.audio-toggle:hover,
+.audio-toggle:active {
+  color: var(--ink-primary);
+  border-color: var(--element-color);
+}
+
+.audio-toggle--off {
+  color: var(--ink-disabled);
+  background: var(--void-01);
+  border-color: var(--void-04);
+}
+
+.audio-toggle--off:hover,
+.audio-toggle--off:active {
+  color: var(--ink-tertiary);
+  border-color: var(--void-05);
+}
+
+.audio-toggle__icon {
+  display: block;
+}
+
+.audio-toggle__icon--off {
+  display: none;
+}
+
+.audio-toggle--off .audio-toggle__icon--on {
+  display: none;
+}
+
+.audio-toggle--off .audio-toggle__icon--off {
+  display: block;
+}
+
+.shell {
+  width: 100vw;
+  min-height: 100svh;
+  min-height: 100dvh;
+  max-width: 100vw;
+  background: var(--void-01);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+/* Slightly smaller hero on narrow phones so nothing clips */
+@media (max-width: 360px) {
+  :root {
+    --text-hero: 48px;
+  }
+}
+
+/* Desktop only — centered phone preview, not on real phones */
+@media (min-width: 768px) {
+  html,
+  body {
+    overflow: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  body {
+    padding: 24px 0 40px;
+  }
+
+  .shell {
+    width: var(--shell-width);
+    height: auto;
+    min-height: 844px;
+    max-width: var(--shell-width);
+    max-height: none;
+    border-radius: var(--shell-radius);
+    border: var(--shell-border);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.02);
+    padding: 0;
+  }
+}

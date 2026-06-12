@@ -1,0 +1,39 @@
+/* NAGIMU — site credit & games nav */
+
+.site-credit {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 16px 24px 8px;
+  margin-top: auto;
+}
+
+.site-credit p {
+  font-size: var(--text-label);
+  color: var(--ink-tertiary);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.site-credit a {
+  color: var(--ink-secondary);
+  text-decoration: none;
+  transition: color 0.2s var(--ease);
+}
+
+.site-credit a:hover,
+.site-credit a:active {
+  color: var(--element-color);
+}
+
+.site-credit .credit-handle {
+  font-weight: var(--weight-bold);
+  color: var(--ink-secondary);
+}
+
+.site-credit--compact {
+  padding: 8px 16px;
+}
+
+.site-credit--compact p {
+  font-size: 9px;
+}
