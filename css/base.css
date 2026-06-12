@@ -82,7 +82,7 @@ ol {
   --element-bg:    var(--water-bg);
 
   /* Typography */
-  --font: 'Vend', sans-serif;
+  --font: 'Vend', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --weight-bold:    700;
   --weight-regular: 400;
 

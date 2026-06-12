@@ -1,6 +1,6 @@
 /* NAGIMU — IndexedDB helpers via idb-keyval */
 
-import { get, set, del } from 'https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm';
+import { get, set, del } from './vendor/idb-keyval.js';
 
 const KEYS = {
   playerName: 'nagimu_player_name',
